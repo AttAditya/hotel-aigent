@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>PostWoman &lt;3</title>
+    <title>Node JS Class</title>
 
     <style>
         * {
@@ -93,6 +93,7 @@
 
         .request-body textarea {
             width: 100%;
+            min-height: 10rem;
             padding: 1rem;
             border: 0.25rem solid #f1f1f1;
             border-radius: 0.5rem;
@@ -156,6 +157,10 @@
 </head>
 
 <script>
+    const BODY_CONFIG = {
+        "TAB": "    "
+    }
+
     function sendRequest(method) {
         const url = document.getElementById('url').value;
         const body = document.getElementById('body').value;
@@ -175,6 +180,57 @@
         }).then(data => {
             document.getElementById('response').innerText = `${data}\n` + document.getElementById('response').innerText;
         });
+    }
+
+    function indent(element) {
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+        const value = element.value;
+
+        element.value = value.substring(0, start) + BODY_CONFIG.TAB + value.substring(end);
+        element.selectionStart = element.selectionEnd = start + BODY_CONFIG.TAB.length;
+    }
+
+    function autoIndent(element) {
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+        const value = element.value;
+
+        if (value[start - 1] === "{") {
+            element.value = value.substring(0, start) + "\n" + BODY_CONFIG.TAB + value.substring(end);
+            element.selectionStart = element.selectionEnd = start + 1 + BODY_CONFIG.TAB.length;
+        }
+    }
+
+    function completeParentheses(element) {
+        const start = element.selectionStart;
+        const end = element.selectionEnd;
+        const value = element.value;
+
+        element.value = value.substring(0, start) + "{" + value.substring(end) + "}";
+        element.selectionStart = element.selectionEnd = start + 1;
+    }
+
+    function bodyKeyDown(element) {
+        switch (event.key.toUpperCase()) {
+            case "TAB": {
+                event.preventDefault();
+                indent(element);
+                break;
+            }
+            case "ENTER": {
+                autoIndent(element);
+                break;
+            }
+            case "{": {
+                event.preventDefault();
+                completeParentheses(element);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
 </script>
 
@@ -201,7 +257,7 @@
             </div>
 
             <div class="request-body">
-                <textarea id="body" placeholder="body"></textarea>
+                <textarea id="body" placeholder="body" onkeydown="bodyKeyDown(this);"></textarea>
             </div>
 
             <h1>Response</h1>

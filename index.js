@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const chatsRouter = require("./src/routes/chats.route");
 
+app.use(express.json());
 app.use("/api/chats", chatsRouter);
 
 app.get("/postwoman", (req, res) => {
