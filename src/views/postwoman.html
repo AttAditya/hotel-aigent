@@ -1,0 +1,216 @@
+<html>
+
+<head>
+    <title>PostWoman &lt;3</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            outline: none;
+        }
+
+        .postwoman {
+            width: 100%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background-color: #f1f1f1;
+        }
+
+        .postwoman-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .postwoman-subtitle {
+            font-size: 1.5rem;
+            color: #555;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            overflow-y: scroll;
+        }
+
+        .devtools {
+            width: 60%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .request-details {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .request-details input, .request-details select, .request-details button{
+            margin: 0;
+            padding: 1rem;
+            border: 0.25rem solid #f1f1f1;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-family: monospace;
+        }
+
+        .request-details input {
+            width: 100%;
+        }
+
+        .request-details button {
+            cursor: pointer;
+            text-align: center;
+            width: 20%;
+        }
+
+        .request-body {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .request-body textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 0.25rem solid #f1f1f1;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        .request-send {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .request-send button {
+            padding: 1rem;
+            border: 0.25rem solid #f1f1f1;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .response {
+            width: 100%;
+            padding: 1rem;
+            border: 0.25rem solid #f1f1f1;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            justify-content: start;
+            min-height: 5rem;
+        }
+
+        .response pre:empty {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .response pre:empty::after {
+            content: 'No Response';
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        .response pre {
+            width: 100%;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<script>
+    function sendRequest(method) {
+        const url = document.getElementById('url').value;
+        const body = document.getElementById('body').value;
+
+        fetch(url, method === "GET" ? {} : {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: body
+        }).then(req => {
+            if (req.status === 404) {
+                return `[${method} ${url}] Not Found`;
+            }
+
+            return req.text();
+        }).then(data => {
+            document.getElementById('response').innerText = `${data}\n` + document.getElementById('response').innerText;
+        });
+    }
+</script>
+
+<body>
+    <div class="container">
+        <div class="postwoman">
+            <h1 class="postwoman-title">PostWoman</h1>
+            <h2 class="postwoman-subtitle">
+                A simple tool to test your APIs.
+                Made with ❤️ by <a href="https://attaditya.tech" target="_blank">Aditya</a>.
+            </h2>
+        </div>
+
+        <div class="devtools">
+            <h1>Request</h1>
+
+            <div class="request-details">
+                <input type="text" id="url" placeholder="url" value="/api">
+
+                <button id="method" onclick="sendRequest('GET');">GET</button>
+                <button id="method" onclick="sendRequest('POST');">POST</button>
+                <button id="method" onclick="sendRequest('PUT');">PUT</button>
+                <button id="method" onclick="sendRequest('DELETE');">DELETE</button>
+            </div>
+
+            <div class="request-body">
+                <textarea id="body" placeholder="body"></textarea>
+            </div>
+
+            <h1>Response</h1>
+
+            <div class="response">
+                <pre id="response"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

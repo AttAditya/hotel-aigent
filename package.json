@@ -1,0 +1,26 @@
+{
+  "name": "hotelaigent",
+  "version": "0.0.0",
+  "description": "An AI Hotel Booking Agent for booking hotels and related services.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo No tests yet...",
+    "start": "node --env-file=.env index.js",
+    "dev": "nodemon --env-file=.env index.js"
+  },
+  "keywords": [
+    "ai",
+    "hotel-management",
+    "hotel-booking",
+    "api"
+  ],
+  "author": "AttAditya",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4",
+    "openai": "^4.52.3",
+    "sequelize": "^6.37.3",
+    "sqlite": "^5.1.1"
+  }
+}
