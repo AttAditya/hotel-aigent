@@ -1,12 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const geminiService = require("../services/gemini.service");
+const chatService = require("../services/chats.service");
 
 router.get("/", async (req, res) => {
-    let room_id = await geminiService.createRoom();
+    let room_id = await chatService.createRoom();
     res.json({
         room_id: room_id
     });
+});
+
+router.get("/:room_id", async (req, res) => {
+    let room_id = req.params.room_id;
+    let history = await chatService.getHistory(room_id);
+
+    log(`chat_${room_id}.json`, history, "json");
+
+    res.json(history);
 });
 
 router.post("/:room_id", async (req, res) => {
@@ -14,7 +23,13 @@ router.post("/:room_id", async (req, res) => {
     let body = req.body;
     
     let message = body.message;
-    let response = await geminiService.onMessage(room_id, message, "user", []);
+    let messageData = {
+        "role": "user",
+        "message": message,
+        "actions": []
+    }
+
+    let response = await chatService.onMessage(room_id, messageData);
 
     res.send(response);
 });
